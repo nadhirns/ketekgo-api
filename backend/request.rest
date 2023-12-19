@@ -1,23 +1,27 @@
+# REGISTER
 POST http://localhost:5000/users 
 Content-Type: application/json
 
 {
-    "name": "user",
-    "email": "usrtest@gmail.com",
-    "password": "testusr123",
-    "confirmPassword": "testusr123",
-    "role": 3
+    "name": "driver2",
+    "email": "driver2@gmail.com",
+    "password": "driver",
+    "confirmPassword": "driver",
+    "role": 2
 
 }
 
 ###
+# GET USERS
 GET http://localhost:5000/users 
 
 ###
-GET http://localhost:5000/users/1
+# GET USER BY ID
+GET http://localhost:5000/users/4
 
 ###
-PATCH http://localhost:5000/users/6 
+# UPDATE USER
+PATCH http://localhost:5000/users/4
 Content-Type: application/json
 
 {
@@ -29,23 +33,80 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5000/users/9
+# DELETE USER
+DELETE http://localhost:5000/users/4
 
 ###
+# LOGIN ADMIN
 POST http://localhost:5000/login 
 Content-Type: application/json
 
-# { 
-#     "email" : "admin@gmail.com",
-#     "password" : "adminketekgo2*13"
-# }
 { 
-    "email" : "usrtest@gmail.com",
+    "email" : "admin@gmail.com",
+    "password" : "adminketekgo2*13"
+}
+
+###
+# LOGIN DRIVER
+POST http://localhost:5000/login 
+Content-Type: application/json
+
+{ 
+    "email" : "drivertest@gmail.com",
+    "password" : "testdriv123"
+}
+
+###
+# LOGIN USER
+POST http://localhost:5000/login 
+Content-Type: application/json
+
+{ 
+    "email" : "usertest@gmail.com",
     "password" : "testusr123"
 }
 
 ###
+# VERIFY ACC
 GET http://localhost:5000/me 
 
 ###
+#  LOGOUT
 DELETE http://localhost:5000/logout 
+
+###
+# GET DRIVERS
+GET http://localhost:5000/drivers 
+
+###
+# GET DRIVERS BY ID
+GET http://localhost:5000/drivers/2
+
+###
+# CREATE DRIVER
+POST http://localhost:5000/drivers 
+Content-Type: application/json
+
+{
+    "placeStart": 2,
+    "placeEnd": 1,
+    "capacity": 10,
+    "time": "2023-12-18T20:30:00",
+    "price": 10000
+}
+###
+# UPDATE DRIVER
+PATCH http://localhost:5000/drivers/2 
+Content-Type: application/json
+
+{
+    "placeStart": 1,
+    "placeEnd": 1,
+    "capacity": 100,
+    "time": "2023-12-18T20:30:00",
+    "price": 10000
+}
+
+###
+# DELETE DRIVER
+DELETE http://localhost:5000/drivers/2

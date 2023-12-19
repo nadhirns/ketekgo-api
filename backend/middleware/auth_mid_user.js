@@ -10,8 +10,12 @@ export const verifyUser = async (req, res, next) => {
       refresh_token: req.session.token,
     },
   });
-  if (!user) return res.status(404).json({ msg: "User Not Found!" });
-  req.userId = user.id;
+  if (!user)
+    return res.status(404).json({
+      error: true,
+      message: "User Not Found!",
+    });
+  req.thisId = user.id;
   req.role = user.user_role_id;
   next();
 };
@@ -23,7 +27,15 @@ export const adminOnly = async (req, res, next) => {
       refresh_token: req.session.token,
     },
   });
-  if (!user) return res.status(404).json({ msg: "User Not Found!" });
-  if (user.user_role_id !== 1) return res.status(403).json({ msg: "Access Denied!" });
+  if (!user)
+    return res.status(404).json({
+      error: true,
+      message: "User Not Found!",
+    });
+  if (user.user_role_id !== 1)
+    return res.status(403).json({
+      error: true,
+      message: "Access Denied!",
+    });
   next();
 };

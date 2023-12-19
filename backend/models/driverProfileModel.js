@@ -1,13 +1,20 @@
 import { Sequelize } from "sequelize";
 import db from "../config/database.js";
-import Roles from "./roleModel.js";
+import Users from "./userModel.js";
 
 const { DataTypes } = Sequelize;
 
-const Users = db.define(
-  "users",
+const DriverProfiles = db.define(
+  "driver_profiles",
   {
-    name: {
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    driver_name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -15,32 +22,15 @@ const Users = db.define(
         len: [3, 100],
       },
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        notEmpty: true,
-        isEmail: true,
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    user_role_id: {
+    rating: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    refresh_token: {
+    photo_url: {
       type: DataTypes.STRING,
-      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -52,7 +42,7 @@ const Users = db.define(
   }
 );
 
-Roles.hasMany(Users);
-Users.belongsTo(Roles, { foreignKey: "user_role_id", as: "UserRole" });
+Users.hasMany(DriverProfiles);
+DriverProfiles.belongsTo(Users, { foreignKey: "user_id", as: "UserId" });
 
-export default Users;
+export default DriverProfiles;

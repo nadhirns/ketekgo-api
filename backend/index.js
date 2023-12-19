@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import db from "./config/database.js";
 import SqlStore from "connect-session-sequelize";
 
+import TransactionRoute from "./routes/transactionRoute.js";
+import DriverRoute from "./routes/driverRoute.js";
+import PlaceRoute from "./routes/placeRoute.js";
 import UserRoute from "./routes/userRoute.js";
 import RoleRoute from "./routes/roleRoute.js";
 import AuthRoute from "./routes/authRoute.js";
@@ -47,6 +50,9 @@ app.use(express.json());
 app.use(UserRoute);
 app.use(RoleRoute);
 app.use(AuthRoute);
+app.use(TransactionRoute);
+app.use(DriverRoute);
+app.use(PlaceRoute);
 
 // store.sync();
 
