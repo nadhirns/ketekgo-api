@@ -3,6 +3,48 @@ import DriverProfiles from "../models/driverProfileModel.js";
 import Places from "../models/placeModel.js";
 import { Op } from "sequelize";
 
+export const joinDriver = async (req, res) => {
+  try {
+    if (req.role !== 3)
+      return res.status(403).json({
+        error: true,
+        message: "Request Denied!",
+      });
+
+    const exist = await DriverProfiles.findOne({
+      where: {
+        user_id: req.thisId,
+      },
+    });
+
+    if (exist)
+      return res.status(403).json({
+        error: true,
+        message: "You are Already a Driver!",
+      });
+
+    const { driverName, photoUrl } = req.body;
+
+    await DriverProfiles.create({
+      user_id: req.thisId,
+      driver_name: driverName,
+      rating: 0,
+      photo_url: photoUrl,
+      userId: req.thisId,
+    });
+
+    res.status(200).json({
+      error: false,
+      message: "Successfully Joined as a Driver!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: error.message,
+    });
+  }
+};
+
 export const getDriver = async (req, res) => {
   try {
     let response;
@@ -66,7 +108,7 @@ export const getDriver = async (req, res) => {
     }
     res.status(200).json({
       error: false,
-      message: "success",
+      message: "Success",
       data: response,
     });
   } catch (error) {
@@ -293,7 +335,7 @@ export const deleteDriver = async (req, res) => {
         error: true,
         message: "Data Not Found!",
       });
-    const { user_id, placeStart, placeEnd, capacity, time, price } = req.body;
+
     if (req.role === 1) {
       await Drivers.destroy({
         where: {

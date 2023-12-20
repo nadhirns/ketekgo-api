@@ -51,9 +51,9 @@ const Transactions = db.define(
 );
 
 Users.hasMany(Transactions);
-Transactions.belongsTo(Users, { foreignKey: "user_id", as: "UserId" });
+Transactions.belongsTo(Users, { foreignKey: "user_id", as: "UserId", onDelete: "CASCADE" });
 
 Drivers.hasMany(Transactions);
-Transactions.belongsTo(Drivers, { foreignKey: "driver_id", as: "DriverId" });
+Transactions.belongsTo(Drivers, { foreignKey: "driver_id", as: "DriverId", onDelete: "CASCADE" });
 
 export default Transactions;

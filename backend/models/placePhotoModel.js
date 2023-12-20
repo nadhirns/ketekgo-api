@@ -28,7 +28,7 @@ const PlacePhotos = db.define(
   }
 );
 
-Places.hasMany(PlacePhotos);
-PlacePhotos.belongsTo(Places, { foreignKey: "place_id", as: "PlaceId" });
+Places.hasMany(PlacePhotos, { foreignKey: "place_id", as: "photos" });
+PlacePhotos.belongsTo(Places, { foreignKey: "place_id", as: "placeId", onDelete: "CASCADE" });
 
 export default PlacePhotos;

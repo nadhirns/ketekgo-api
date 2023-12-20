@@ -1,8 +1,10 @@
 import express from "express";
-import { getDriver, getDriverById, createDriver, updateDriver, deleteDriver } from "../controllers/driver_controller.js";
+import { joinDriver, getDriver, getDriverById, createDriver, updateDriver, deleteDriver } from "../controllers/driver_controller.js";
 import { verifyUser } from "../middleware/auth_mid_user.js";
 
 const router = express.Router();
+
+router.post("/join", verifyUser, joinDriver);
 
 router.get("/drivers", verifyUser, getDriver);
 router.get("/drivers/:id", verifyUser, getDriverById);

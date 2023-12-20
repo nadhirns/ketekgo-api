@@ -53,6 +53,6 @@ const Users = db.define(
 );
 
 Roles.hasMany(Users);
-Users.belongsTo(Roles, { foreignKey: "user_role_id", as: "UserRole" });
+Users.belongsTo(Roles, { foreignKey: "user_role_id", as: "UserRole", onDelete: "CASCADE" });
 
 export default Users;

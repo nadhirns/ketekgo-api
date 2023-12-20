@@ -43,6 +43,6 @@ const DriverProfiles = db.define(
 );
 
 Users.hasMany(DriverProfiles);
-DriverProfiles.belongsTo(Users, { foreignKey: "user_id", as: "UserId" });
+DriverProfiles.belongsTo(Users, { foreignKey: "user_id", as: "UserId", onDelete: "CASCADE" });
 
 export default DriverProfiles;
