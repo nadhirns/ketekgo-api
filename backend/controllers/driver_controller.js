@@ -45,65 +45,88 @@ export const joinDriver = async (req, res) => {
   }
 };
 
+export const getOnlyDriver = async (req, res) => {
+  try {
+    let response;
+    const driver = await DriverProfiles.findOne({
+      where: {
+        user_id: req.thisId,
+      },
+    });
+
+    if (!driver)
+      return res.status(404).json({
+        error: true,
+        message: "Driver not found",
+      });
+
+    response = await Drivers.findAll({
+      attributes: ["id", "capacity", "time", "price"],
+      where: {
+        user_id: driver.id,
+      },
+      include: [
+        {
+          model: DriverProfiles,
+          as: "Driver",
+          attributes: ["user_id", "driver_name", "rating", "photo_url"],
+        },
+        {
+          model: Places,
+          as: "PlaceStart",
+          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+        },
+        {
+          model: Places,
+          as: "PlaceEnd",
+          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+        },
+      ],
+    });
+    res.status(200).json({
+      error: false,
+      message: "Success",
+      data: response,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: error.message,
+    });
+  }
+};
+
 export const getDriver = async (req, res) => {
   try {
     let response;
-    if (req.role === 1) {
-      response = await Drivers.findAll({
-        attributes: ["id", "capacity", "time", "price"],
-        include: [
-          {
-            model: DriverProfiles,
-            as: "Driver",
-            attributes: ["user_id", "driver_name", "rating", "photo_url"],
-          },
-          {
-            model: Places,
-            as: "PlaceStart",
-            attributes: { exclude: ["id", "createdAt", "updatedAt"] },
-          },
-          {
-            model: Places,
-            as: "PlaceEnd",
-            attributes: { exclude: ["id", "createdAt", "updatedAt"] },
-          },
-        ],
-      });
-    } else {
-      const driver = await DriverProfiles.findOne({
-        where: {
-          user_id: req.thisId,
+    response = await Drivers.findAll({
+      attributes: ["id", "capacity", "time", "price"],
+      where: {
+        available: true,
+      },
+      include: [
+        {
+          model: DriverProfiles,
+          as: "Driver",
+          attributes: ["user_id", "driver_name", "rating", "photo_url"],
         },
-      });
-
-      if (!driver)
-        return res.status(404).json({
-          error: true,
-          message: "Driver not found",
-        });
-
-      response = await Drivers.findAll({
-        attributes: ["id", "capacity", "time", "price"],
-        where: {
-          user_id: driver.id,
+        {
+          model: Places,
+          as: "PlaceStart",
+          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
         },
-        include: [
-          {
-            model: DriverProfiles,
-            as: "Driver",
-            attributes: ["user_id", "driver_name", "rating", "photo_url"],
-          },
-          {
-            model: Places,
-            as: "PlaceStart",
-            attributes: { exclude: ["id", "createdAt", "updatedAt"] },
-          },
-          {
-            model: Places,
-            as: "PlaceEnd",
-            attributes: { exclude: ["id", "createdAt", "updatedAt"] },
-          },
-        ],
+        {
+          model: Places,
+          as: "PlaceEnd",
+          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+        },
+      ],
+    });
+
+    if (response.length === 0) {
+      return res.status(200).json({
+        error: false,
+        message: "No Drivers Yet!",
       });
     }
     res.status(200).json({
@@ -208,7 +231,7 @@ export const getDriverById = async (req, res) => {
 };
 
 export const createDriver = async (req, res) => {
-  const { placeStart, placeEnd, capacity, time, price } = req.body;
+  const { placeStart, placeEnd, capacity, time, price, available } = req.body;
 
   try {
     const driver = await DriverProfiles.findOne({
@@ -231,6 +254,7 @@ export const createDriver = async (req, res) => {
       capacity: capacity,
       time: time,
       price: price,
+      available: available,
       driverProfileId: driver.id,
     });
 
@@ -258,7 +282,7 @@ export const updateDriver = async (req, res) => {
         error: true,
         message: "Data Not Found!",
       });
-    const { user_id, placeStart, placeEnd, capacity, time, price } = req.body;
+    const { user_id, placeStart, placeEnd, capacity, time, price, available } = req.body;
     if (req.role === 1) {
       await Drivers.update(
         {
@@ -268,6 +292,7 @@ export const updateDriver = async (req, res) => {
           capacity: capacity,
           time: time,
           price: price,
+          available: available,
           driverProfileId: user_id,
         },
         {
@@ -302,6 +327,7 @@ export const updateDriver = async (req, res) => {
           capacity: capacity,
           time: time,
           price: price,
+          available: available,
           driverProfileId: driver.id,
         },
         {

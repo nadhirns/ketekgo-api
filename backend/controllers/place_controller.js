@@ -34,6 +34,13 @@ export const getPlace = async (req, res) => {
       };
     });
 
+    if (response.length === 0) {
+      return res.status(200).json({
+        error: false,
+        message: "No Places Yet!",
+      });
+    }
+
     res.status(200).json({
       error: false,
       message: "Success",

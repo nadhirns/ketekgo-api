@@ -15,6 +15,12 @@ export const getUsers = async (req, res) => {
         },
       ],
     });
+    if (response.length === 0) {
+      return res.status(200).json({
+        error: false,
+        message: "No Users Yet!",
+      });
+    }
     res.status(200).json({
       error: false,
       message: "success",

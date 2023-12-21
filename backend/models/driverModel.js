@@ -43,6 +43,13 @@ const Drivers = db.define(
         notEmpty: true,
       },
     },
+    available: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
     price: {
       type: DataTypes.FLOAT,
       allowNull: false,
